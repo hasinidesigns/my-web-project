@@ -1,5 +1,8 @@
 //globals - stores search results//
 let cachedResults = [];
+let currentPage = 1;
+let currentQueryUrl = "";
+let limit = 25;
 
 // Function to get user's location and fetch data based on city or suburb//
 function getLocationAndFetchData() {
@@ -25,6 +28,11 @@ function getLocationAndFetchData() {
 
         // Fallback (next option if first fails): search for 'dog' in NFSA collection
         getData("https://api.collection.nfsa.gov.au/search?query=dog");
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
       }
     );
   // if browser doesn't even support location//
@@ -32,6 +40,11 @@ function getLocationAndFetchData() {
     // show message and fetch 'dog' results anyways//
     console.log("Geolocation not supported in this browser.");
     document.getElementById("objectsContainer").innerHTML = `<p>Geolocation is not supported. Showing default results.</p>`; 
+
+      // Fallback: Use a general query if geolocation fails
+      currentPage = 1;
+      currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=dog";
+
     // Fetch default data
     getData("https://api.collection.nfsa.gov.au/search?query=dog");
   }
@@ -66,17 +79,21 @@ function getCityFromCoordinates(lat, lon) {
     });
 }
 
+function showMoreButton() {
+  document.getElementById("moreBtn").style.display = "inline-block";
+}
+
 // Function to search NFSA API using URL with city/suburb name//
 function searchByLocation(location) {
-  const queryUrl = `https://api.collection.nfsa.gov.au/search?query=${encodeURIComponent(location)}`;
-  console.log(`Searching NFSA API for: ${location}`); 
-  getData(queryUrl);
+  currentPage = 1;
+  currentQueryUrl = `https://api.collection.nfsa.gov.au/search?query=${encodeURIComponent(location)}`;
+  getData(`${currentQueryUrl}&page=${currentPage}&limit=${limit}`);
 }
 
 // Function to fetch data from NFSA API -- accepts URL and an optional callback function//
-function getData(url, callback) {
-  // fetch data from URL and turn it into JSON -- if request fails throw an error//
-  fetch(url)
+function getData(url, callback, append = false) {
+// fetch data from URL and turn it into JSON -- if request fails throw an error//
+fetch(url)
     .then(response => {
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
@@ -86,7 +103,7 @@ function getData(url, callback) {
       if (callback) {
         callback(data);
       } else {
-        displayResults(data.results); // This should only happen for search responses//
+        displayResults(data.results, append);
       }
     })
     // if API fails, show an error message in the page//
@@ -99,13 +116,18 @@ function getData(url, callback) {
 
 
 // Function to display API results
-function displayResults(results) {
+function displayResults(results, append = false) {
   // Save results in a memory box so we can return to it later if user presses back//
+  if (!append) {
 
   cachedResults = results;
   // get output area and wipe it clean -- like erasing a whiteboard before writing new things// 
-  const objectsContainer = document.getElementById("objectsContainer");
-  objectsContainer.innerHTML = ""; // Clear previous results
+  document.getElementById("objectsContainer").innerHTML = "";
+  } else {
+    cachedResults = cachedResults.concat(results); // Add to cache
+  }
+
+  const objectsContainer = document.getElementById("objectsContainer"); 
 
   // loop through each search result//
   results.forEach(item => {
@@ -149,7 +171,11 @@ function displayResults(results) {
       loadItemDetails(itemId);
     });
   });
+  
+  showMoreButton();
+
 }
+
 
 // Function to show a single item when clicked//
 function loadItemDetails(id) {
@@ -188,4 +214,15 @@ function loadItemDetails(id) {
 
 // Call function to get user location and fetch API data
 // getLocationAndFetchData(); 
-getData("https://api.collection.nfsa.gov.au/search?query=dog");
+currentPage = 1;
+limit = 25;
+currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=dog";
+getData(`${currentQueryUrl}&page=${currentPage}&limit=${limit}`);
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("moreBtn").addEventListener("click", () => {
+    currentPage += 1;
+    const nextUrl = `${currentQueryUrl}&page=${currentPage}&limit=${limit}`;
+    getData(nextUrl, null, true); // append = true
+  });
+});

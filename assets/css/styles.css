@@ -3,15 +3,13 @@ body {
   margin: 20px;
   padding: 20px;
 }
-
-#output {
+#output { 
   margin-top: 20px;
   padding: 10px;
   border: 1px solid #ccc;
 }
-
-.item {
-    border-bottom: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
+.item { 
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
 }
