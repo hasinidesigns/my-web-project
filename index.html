@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<head> 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>11841 GLAM API Demo</title>
+  <title>United Kingdom Film Trailers</title>
+
+  <!-- Bootstrap for styling -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
+<body> 
+  <!--h1 title-->
+  <header class="text-center mb-4">
+    <h1 class="display-2">United Kingdom Film Trailers</h1>
+  </header>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> 
+  <!-- gallery container -->
+  <main class="container">
+    <div id="objectsContainer" class="row g-4"></div>
 
-<body>
-  <h1>GLAM API Data</h1>
-  <div id="objectsContainer"></div>
+    <!-- more button (to load more items) -->
+    <div id="moreContainer" class="text-center mt-4">
+      <button id="moreBtn" class="btn btn-primary" style="display:none;">Load More</button>
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
   <script src="assets/js/script.js"></script>
-  <div id="moreContainer" style="text-align:center; margin-top: 20px;">
-  <button id="moreBtn" style="display:none;">More</button>
-</div>
-</body>
-
-</html> 
+</body> 
+</html>
