@@ -1,13 +1,13 @@
 //Globals- stores search results//
 let cachedResults = [];// Stores results from API//
 let currentPage = 1;// Current page of results//
-let currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=uk%20trailer"; //API URL for search//
-let limit = 12;// Number of items per page//
-
-//Initial load - clicking 'back' reloads the cached list//
+let currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=trailers=United%20Kingdom"; //API URL for search//
+let limit = 9;// Number of items per page//
+//Initial load - clicking 'back' reloads the cached list// 
 document.addEventListener("DOMContentLoaded", () => {
  fetchResults(); // Fetch initial data on first page//
 
+ 
  // "Load More" button//
  document.getElementById("moreBtn").addEventListener("click", () => {
    currentPage++; //go to next page//
@@ -58,33 +58,60 @@ function displayResults(results) {
        </div>
      </div>
    `;
-   
+
    //Add card onto page//
    container.appendChild(card);
  });
 
+ // Add click event for details
+ document.querySelectorAll(".viewBtn").forEach(btn => {
+   btn.addEventListener("click", e => loadItemDetails(e.target.dataset.id));
+ });
+
+ 
 //'Load More' button to be visible at bottom of the page
  document.getElementById("moreBtn").style.display = "inline-block"; // Show load more
 }
 
 
-//Item function//
+//Items//
+//function to load details for a single item by its ID//
 async function loadItemDetails(id) {
+ //grab the container where content is displayed//
  const output = document.getElementById("objectsContainer");
- output.innerHTML = "<p>Loading item details...</p>";
-
+ //show temporary loading message//
+ output.innerHTML = "<p>Loading item details...</p>"; 
 
  try {
-  //Fetch details for single item//
-   const response = await fetch(`https://api.collection.nfsa.gov.au/title/${id}`);
-   const item = await response.json(); //Convert API to JSON//
+  //fetch details for the single item from the NFSA API//
+   const response = await fetch(`https://api.collection.nfsa.gov.au/title/${id}`); 
+   //convert reponse to JSON format//
+   const item = await response.json();
 
-  //Add 'back' button 
+   //check if item has an image, if not, use placeholder//
+   const img = (item.preview && item.preview[0]?.filePath)
+               ? `https://media.nfsacollection.net/${item.preview[0].filePath}`
+               : "https://via.placeholder.com/400x200?text=No+Image";
+
+  //replace container with content with item details//
+   output.innerHTML = `
+     <button id="backBtn" class="btn btn-secondary mb-3">← Back to Gallery</button>
+     <div class="card">
+       <img src="${img}" class="card-img-top" alt="${item.title || "Untitled"}">
+       <div class="card-body">
+         <h2 class="card-title">${item.title || "Untitled"}</h2>
+         <p class="card-text">${item.name || ""}</p>
+       </div>
+     </div>
+   `;
+
+   //event listener for 'back button' - when clicked it reloads previosuly cached gallery results//
    document.getElementById("backBtn").addEventListener("click", () => displayResults(cachedResults));
+
  } catch (err) {
+  //if theres error fetching -> logs and shows error message//
    console.error("Error fetching item details:", err);
    output.innerHTML = "<p class='text-danger'>Error loading details.</p>";
  }
-}
-
+} 
 
