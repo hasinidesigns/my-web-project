@@ -54,9 +54,11 @@ function displayResults(results) {
        <div class="card-body d-flex flex-column">
          <h5 class="card-title">${item.title || "Untitled"}</h5>
          <p class="card-text mb-4">${item.name || ""}</p>
+         <button class="btn btn-sm btn-outline-primary mt-auto viewBtn" data-id="${item.id}">View Details</button>
        </div>
      </div>
    `;
+   
    //Add card onto page//
    container.appendChild(card);
  });
