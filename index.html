@@ -3,7 +3,7 @@
 <head> 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>United Kingdom Film Trailers</title>
+  <title>UK Film Trailers</title>
 
   <!-- Bootstrap for styling -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,8 +12,50 @@
 <body> 
   <!--h1 title-->
   <header class="text-center mb-4">
-    <h1 class="display-2">United Kingdom Film Trailers</h1>
+    <h1 id="mainHeader" class="display-2">United Kingdom Film Trailers</h1>
   </header>
+
+  <!-- Filter Bar -->
+<div class="container mb-4">
+  <div class="row g-2 justify-content-center align-items-center">
+    <div class="col-auto">
+      <select id="filterYear" class="form-select">
+        <option value="">Year</option>
+        <option value="2023">2023</option>
+        <option value="2022">2022</option>
+        <option value="2021">2021</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <select id="filterLanguage" class="form-select">
+        <option value="">Language</option>
+        <option value="English">English</option>
+        <option value="French">French</option>
+        <!-- add more languages -->
+      </select>
+    </div>
+    <div class="col-auto">
+      <select id="filterGenre" class="form-select">
+        <option value="">Genre</option>
+        <option value="Drama">Drama</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Action">Action</option>
+        <!-- add more genres -->
+      </select>
+    </div>
+    <div class="col-auto">
+      <select id="filterColour" class="form-select">
+        <option value="">Colour</option>
+        <option value="Colour">Colour</option>
+        <option value="Black & White">Black & White</option>
+        <option value="Colour + Black & White">Both</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
+    </div>
+  </div>
+</div>
 
   <!-- gallery container -->
   <main class="container">
