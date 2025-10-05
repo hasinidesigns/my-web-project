@@ -1,36 +1,40 @@
-//Globals- stores search results//
 let cachedResults = [];// Stores results from API//
-let currentPage = 1;// Current page of results//
+let allResults = []; // Our variable to hold all items
 let currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes"; //API URL for search//
-let limit = 9;// Number of items per page//
-//Initial load - clicking 'back' reloads the cached list// 
+
+//Initial load - clicking 'back' reloads the cached list//
 document.addEventListener("DOMContentLoaded", () => {
  fetchResults(); // Fetch initial data on first page//
-
- 
- // "Load More" button//
- document.getElementById("moreBtn").addEventListener("click", () => {
-   currentPage++; //go to next page//
-   fetchResults(true); // Fetch next page and find results from list//
- });
 });
 
-//Function to get data from API for the first page//
-async function fetchResults(append = false) {
+//Function to get data from ALL pages//
+async function fetchResults() {
  try {
-  //Fetch data from the API using the current page//
-   const response = await fetch(`${currentQueryUrl}&page=${currentPage}&limit=${limit}`);
-   const data = await response.json();
+  const totalPages = 23; // There are 23 pages total.
+  allResults = []; // Clear the list before fetching
 
-   //Update cached results//
-   cachedResults = append ? cachedResults.concat(data.results) : data.results;
-   displayResults(append ? data.results : cachedResults);
+  // Loop through all 23 pages
+  for (let i = 1; i <= totalPages; i++) {
+    console.log(`Fetching page ${i}...`); // Log progress
+    const response = await fetch(`${currentQueryUrl}&page=${i}`);
+    const data = await response.json();
+    
+    // Add the results from the current page to our main list
+    if (data.results) { // Check if results exist to avoid errors
+        allResults = allResults.concat(data.results);
+    }
+  }
+
+   console.log(`Finished fetching. Total items: ${allResults.length}`);
+   // Now that we have everything, update the cache and display it all
+   displayResults(allResults);
+
  } catch (err) {
    console.error("Error fetching data:", err);
    document.getElementById("objectsContainer").innerHTML =
      `<p class='text-danger'>Error fetching data. Please try again later.</p>`;
  }
-} 
+}
  
 //Diaplay results on the page//
 function displayResults(results) {
@@ -67,11 +71,7 @@ function displayResults(results) {
  document.querySelectorAll(".viewBtn").forEach(btn => {
    btn.addEventListener("click", e => loadItemDetails(e.target.dataset.id));
  });
-
- 
-//'Load More' button to be visible at bottom of the page
- document.getElementById("moreBtn").style.display = "inline-block"; // Show load more
-}
+} 
 
 
 //Items//
