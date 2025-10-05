@@ -1,7 +1,7 @@
 //Globals- stores search results//
 let cachedResults = [];// Stores results from API//
 let currentPage = 1;// Current page of results//
-let currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=trailers=United%20Kingdom"; //API URL for search//
+let currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes"; //API URL for search//
 let limit = 9;// Number of items per page//
 //Initial load - clicking 'back' reloads the cached list// 
 document.addEventListener("DOMContentLoaded", () => {
