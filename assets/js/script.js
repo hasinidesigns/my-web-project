@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let newQuery = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes";
     
     if (colour) {
-      newQuery += `&colour=${colour}`;
+      newQuery += `&colour=${encodeURIComponent(colour)}`;
     }
     
     currentQueryUrl = newQuery;
@@ -67,9 +67,16 @@ function displayResults(results) {
 
  //check  if item has an image, otherwise use placeholder//
  results.forEach(item => {
-   const img = (item.preview && item.preview[0]?.filePath)
-               ? `https://media.nfsacollection.net/${item.preview[0].filePath}`
-               : "https://via.placeholder.com/400x200?text=No+Image";
+   let img;
+   if (item.preview && item.preview[0]) {
+     if (item.preview[0].type === 'video') {
+       img = `https://media.nfsacollection.net/${item.preview[0].thumbnailFilePath}`;
+     } else {
+       img = `https://media.nfsacollection.net/${item.preview[0].filePath}`;
+     }
+   } else {
+     img = "https://via.placeholder.com/400x200?text=No+Image";
+   }
 
   //Bootstrap card for each item//
    const card = document.createElement("div");
@@ -113,9 +120,16 @@ async function loadItemDetails(id) {
    const item = await response.json();
 
    //check if item has an image, if not, use placeholder//
-   const img = (item.preview && item.preview[0]?.filePath)
-               ? `https://media.nfsacollection.net/${item.preview[0].filePath}`
-               : "https://via.placeholder.com/400x200?text=No+Image";
+   let img;
+   if (item.preview && item.preview[0]) {
+     if (item.preview[0].type === 'video') {
+       img = `https://media.nfsacollection.net/${item.preview[0].thumbnailFilePath}`;
+     } else {
+       img = `https://media.nfsacollection.net/${item.preview[0].filePath}`;
+     }
+   } else {
+     img = "https://via.placeholder.com/400x200?text=No+Image";
+   }
 
   //replace container with content with item details//
    output.innerHTML = `
