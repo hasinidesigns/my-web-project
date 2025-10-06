@@ -49,10 +49,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add event listener for the filter button
   document.getElementById("applyFilters").addEventListener("click", () => {
     const colour = document.getElementById("filterColour").value;
+    let country = document.getElementById("filterCountry").value;
     let newQuery = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes";
     
     if (colour) {
       newQuery += `&colour=${encodeURIComponent(colour)}`;
+    }
+
+    if (country) {
+      if (country === "U.S.A") {
+        country = "U%2ES%2EA";
+      }
+      newQuery += `&countries=${country}`;
     }
     
     currentQueryUrl = newQuery;
