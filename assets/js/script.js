@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("applyFilters").addEventListener("click", () => {
     const colour = document.getElementById("filterColour").value;
     let country = document.getElementById("filterCountry").value;
+    const medium = document.getElementById("filterMedium").value;
     let newQuery = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes";
     
     if (colour) {
@@ -61,6 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
         country = "U%2ES%2EA";
       }
       newQuery += `&countries=${country}`;
+    }
+
+    if (medium) {
+      newQuery += `&subMedium=${encodeURIComponent(medium)}`;
     }
     
     currentQueryUrl = newQuery;
@@ -79,6 +84,8 @@ function displayResults(results) {
    if (item.preview && item.preview[0]) {
      if (item.preview[0].type === 'video') {
        img = `https://media.nfsacollection.net/${item.preview[0].thumbnailFilePath}`;
+     } else if (item.preview[0].type === 'audio') {
+       img = "assets/imgs/audio_wave.jpg";
      } else {
        img = `https://media.nfsacollection.net/${item.preview[0].filePath}`;
      }
@@ -132,6 +139,8 @@ async function loadItemDetails(id) {
    if (item.preview && item.preview[0]) {
      if (item.preview[0].type === 'video') {
        img = `https://media.nfsacollection.net/${item.preview[0].thumbnailFilePath}`;
+     } else if (item.preview[0].type === 'audio') {
+       img = "assets/imgs/audio_wave.jpg";
      } else {
        img = `https://media.nfsacollection.net/${item.preview[0].filePath}`;
      }
