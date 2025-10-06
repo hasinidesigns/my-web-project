@@ -1,40 +1,64 @@
 let cachedResults = [];// Stores results from API//
-let allResults = []; // Our variable to hold all items
 let currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes"; //API URL for search//
 
-//Initial load - clicking 'back' reloads the cached list//
-document.addEventListener("DOMContentLoaded", () => {
- fetchResults(); // Fetch initial data on first page//
-});
+// Abstracted function to handle fetching all pages for a given query
+async function fetchAllPages(baseUrl) {
+  let allResults = [];
+  let page = 1;
+  while (true) {
+    console.log(`Fetching page ${page} for ${baseUrl}`);
+    const response = await fetch(`${baseUrl}&page=${page}`);
 
-//Function to get data from ALL pages//
-async function fetchResults() {
- try {
-  const totalPages = 23; // There are 23 pages total.
-  allResults = []; // Clear the list before fetching
+    // Read the response as text first to handle empty bodies from the server
+    const responseText = await response.text();
+    if (!responseText) {
+      // The response body is empty, so we can safely assume there are no more pages.
+      break;
+    }
 
-  // Loop through all 23 pages
-  for (let i = 1; i <= totalPages; i++) {
-    console.log(`Fetching page ${i}...`); // Log progress
-    const response = await fetch(`${currentQueryUrl}&page=${i}`);
-    const data = await response.json();
-    
-    // Add the results from the current page to our main list
-    if (data.results) { // Check if results exist to avoid errors
-        allResults = allResults.concat(data.results);
+    // Now that we know the response is not empty, we can parse it as JSON.
+    const data = JSON.parse(responseText);
+
+    if (data.results && data.results.length > 0) {
+      allResults = allResults.concat(data.results);
+      page++;
+    } else {
+      // The JSON is valid but contains no results, so we're also done.
+      break;
     }
   }
-
-   console.log(`Finished fetching. Total items: ${allResults.length}`);
-   // Now that we have everything, update the cache and display it all
-   displayResults(allResults);
-
- } catch (err) {
-   console.error("Error fetching data:", err);
-   document.getElementById("objectsContainer").innerHTML =
-     `<p class='text-danger'>Error fetching data. Please try again later.</p>`;
- }
+  return allResults;
 }
+
+// Main function to orchestrate fetching and displaying data
+async function fetchResults() {
+  try {
+    const results = await fetchAllPages(currentQueryUrl);
+    console.log(`Finished fetching. Total items: ${results.length}`);
+    cachedResults = results;
+    displayResults(cachedResults);
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    document.getElementById("objectsContainer").innerHTML = `<p class='text-danger'>Error fetching data. Please try again later.</p>`;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetchResults(); // Initial load
+
+  // Add event listener for the filter button
+  document.getElementById("applyFilters").addEventListener("click", () => {
+    const colour = document.getElementById("filterColour").value;
+    let newQuery = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes";
+    
+    if (colour) {
+      newQuery += `&colour=${colour}`;
+    }
+    
+    currentQueryUrl = newQuery;
+    fetchResults(); // Re-fetch with the new filter
+  });
+});
  
 //Diaplay results on the page//
 function displayResults(results) {
