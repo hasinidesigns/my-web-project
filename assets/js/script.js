@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const colour = document.getElementById("filterColour").value;
     let country = document.getElementById("filterCountry").value;
     const medium = document.getElementById("filterMedium").value;
+    const year = document.getElementById("filterYear").value;
     let newQuery = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes";
     
     if (colour) {
@@ -66,6 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (medium) {
       newQuery += `&subMedium=${encodeURIComponent(medium)}`;
+    }
+
+    if (year) {
+      newQuery += `&year=${year}`;
     }
     
     currentQueryUrl = newQuery;
