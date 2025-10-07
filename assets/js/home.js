@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const video = document.getElementById("myVideo");
     console.log("Video element:", video);
 
-    const startTime = 20;
+    const startTime = 50;
     const endTime = 66;
 
     video.addEventListener('loadedmetadata', function() {
