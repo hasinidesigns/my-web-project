@@ -85,6 +85,7 @@ function displayResults(results) {
 
  //check  if item has an image, otherwise use placeholder//
  results.forEach(item => {
+   console.log(item.id);
    let img;
    if (item.preview && item.preview[0]) {
      if (item.preview[0].type === 'video') {
@@ -104,12 +105,14 @@ function displayResults(results) {
 
    //Add title, name and image to card//
    card.innerHTML = `
-     <div class="card h-100">
+     <div class="card">
        <img src="${img}" class="card-img-top" alt="${item.title || "Untitled"}">
-       <div class="card-body d-flex flex-column">
-         <h5 class="card-title">${item.title || "Untitled"}</h5>
-         <p class="card-text mb-4">${item.name || ""}</p>
-         <button class="btn btn-sm btn-outline-primary mt-auto viewBtn" data-id="${item.id}">View Details</button>
+       <div class="card-body">
+         <div class="card-details">
+           <h5 class="card-title">${item.title || "Untitled"}</h5>
+           <p class="card-text mb-4">${item.name || ""}</p>
+           <a href="#" class="view-details-btn" data-id="${item.id}">View Details</a>
+         </div>
        </div>
      </div>
    `;
@@ -119,7 +122,7 @@ function displayResults(results) {
  });
 
  // Add click event for details
- document.querySelectorAll(".viewBtn").forEach(btn => {
+ document.querySelectorAll(".view-details-btn").forEach(btn => {
    btn.addEventListener("click", e => loadItemDetails(e.target.dataset.id));
  });
 } 
@@ -139,28 +142,35 @@ async function loadItemDetails(id) {
    //convert reponse to JSON format//
    const item = await response.json();
 
-   //check if item has an image, if not, use placeholder//
    let img;
    if (item.preview && item.preview[0]) {
-     if (item.preview[0].type === 'video') {
-       img = `https://media.nfsacollection.net/${item.preview[0].thumbnailFilePath}`;
-     } else if (item.preview[0].type === 'audio') {
-       img = "assets/imgs/audio_wave.jpg";
-     } else {
-       img = `https://media.nfsacollection.net/${item.preview[0].filePath}`;
-     }
-   } else {
-     img = "https://via.placeholder.com/400x200?text=No+Image";
-   }
+    if (item.preview[0].type === 'video') {
+      img = `https://media.nfsacollection.net/${item.preview[0].thumbnailFilePath}`;
+    } else if (item.preview[0].type === 'audio') {
+      img = "assets/imgs/audio_wave.jpg";
+    } else {
+      img = `https://media.nfsacollection.net/${item.preview[0].filePath}`;
+    }
+  } else {
+    img = "https://via.placeholder.com/400x200?text=No+Image";
+  }
 
   //replace container with content with item details//
    output.innerHTML = `
      <button id="backBtn" class="btn btn-secondary mb-3">← Back to Gallery</button>
-     <div class="card">
-       <img src="${img}" class="card-img-top" alt="${item.title || "Untitled"}">
-       <div class="card-body">
-         <h2 class="card-title">${item.title || "Untitled"}</h2>
-         <p class="card-text">${item.name || ""}</p>
+     <div class="row">
+       <div class="col-md-6">
+         <img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">
+       </div>
+       <div class="col-md-6">
+         <h2>${item.title || "Untitled"}</h2>
+         <p>${item.summary || ""}</p>
+         <ul class="list-group list-group-flush">
+           <li class="list-group-item"><strong>Date:</strong> ${item.productionDates && item.productionDates[0] ? item.productionDates[0].fromYear : 'N/A'}</li>
+           <li class="list-group-item"><strong>Country:</strong> ${item.countries ? item.countries.join(', ') : 'N/A'}</li>
+           <li class="list-group-item"><strong>Medium:</strong> ${item.subMedium || 'N/A'}</li>
+           <li class="list-group-item"><strong>Form:</strong> ${item.forms ? item.forms.join(', ') : 'N/A'}</li>
+         </ul>
        </div>
      </div>
    `;
