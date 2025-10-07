@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("DOM fully loaded and parsed");
 
     const video = document.getElementById("myVideo");
+    const exploreButton = document.querySelector('.explore-button');
     console.log("Video element:", video);
 
     const startTime = 50;
@@ -22,5 +23,13 @@ document.addEventListener("DOMContentLoaded", function() {
         if (video.currentTime >= endTime) {
             video.currentTime = startTime;
         }
+    });
+
+    exploreButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.classList.add('fade-out');
+        setTimeout(function() {
+            window.location.href = exploreButton.href;
+        }, 500);
     });
 });
