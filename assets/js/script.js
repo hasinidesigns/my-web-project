@@ -46,6 +46,20 @@ async function fetchResults() {
 document.addEventListener("DOMContentLoaded", () => {
   fetchResults(); // Initial load
 
+  // Info panel//
+  const infoButton = document.getElementById('info-button');
+  const infoPanel = document.getElementById('info-panel');
+  const closePanel = document.getElementById('close-panel');
+
+  infoButton.addEventListener('click', () => {
+    infoPanel.classList.toggle('open');
+  });
+
+  closePanel.addEventListener('click', (e) => {
+    e.preventDefault();
+    infoPanel.classList.remove('open');
+  });
+
   // Add event listener for the filter button
   document.getElementById("applyFilters").addEventListener("click", () => {
     const colour = document.getElementById("filterColour").value;
@@ -80,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
 //Diaplay results on the page//
 function displayResults(results) {
+  document.body.classList.remove('details-view');
  const container = document.getElementById("objectsContainer");
  container.innerHTML = ""; // Clear previous
 
@@ -131,6 +146,7 @@ function displayResults(results) {
 //Items//
 //function to load details for a single item by its ID//
 async function loadItemDetails(id) {
+  document.body.classList.add('details-view');
  //grab the container where content is displayed//
  const output = document.getElementById("objectsContainer");
  //show temporary loading message//
@@ -142,35 +158,35 @@ async function loadItemDetails(id) {
    //convert reponse to JSON format//
    const item = await response.json();
 
-   let img;
-   if (item.preview && item.preview[0]) {
-    if (item.preview[0].type === 'video') {
-      img = `https://media.nfsacollection.net/${item.preview[0].thumbnailFilePath}`;
-    } else if (item.preview[0].type === 'audio') {
-      img = "assets/imgs/audio_wave.jpg";
-    } else {
-      img = `https://media.nfsacollection.net/${item.preview[0].filePath}`;
-    }
-  } else {
-    img = "https://via.placeholder.com/400x200?text=No+Image";
-  }
+   let img = "https://via.placeholder.com/400x200?text=No+Image"; // Default placeholder
+
+   if (item.media && Array.isArray(item.media)) {
+     const accessCopy = item.media.find(m => m.itemUsage === 'Access/Browsing copy');
+     if (accessCopy && accessCopy.preview && accessCopy.preview.filePath) {
+       img = `https://media.nfsacollection.net/${accessCopy.preview.filePath}`;
+     }
+   }
 
   //replace container with content with item details//
    output.innerHTML = `
-     <button id="backBtn" class="btn btn-secondary mb-3">← Back to Gallery</button>
-     <div class="row">
-       <div class="col-md-6">
-         <img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">
-       </div>
-       <div class="col-md-6">
-         <h2>${item.title || "Untitled"}</h2>
-         <p>${item.summary || ""}</p>
-         <ul class="list-group list-group-flush">
-           <li class="list-group-item"><strong>Date:</strong> ${item.productionDates && item.productionDates[0] ? item.productionDates[0].fromYear : 'N/A'}</li>
-           <li class="list-group-item"><strong>Country:</strong> ${item.countries ? item.countries.join(', ') : 'N/A'}</li>
-           <li class="list-group-item"><strong>Medium:</strong> ${item.subMedium || 'N/A'}</li>
-           <li class="list-group-item"><strong>Form:</strong> ${item.forms ? item.forms.join(', ') : 'N/A'}</li>
-         </ul>
+     <div class="details-container">
+       <button id="backBtn" class="btn btn-secondary mb-3">← Back to Gallery</button>
+       <div class="row">
+         <div class="details-image-col">
+           <div class="image-container">
+             <img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">
+           </div>
+         </div>
+         <div class="details-text-col">
+           <h2>${item.title || "Untitled"}</h2>
+           <p>${item.summary || ""}</p>
+           <ul class="list-group list-group-flush">
+             <li class="list-group-item"><strong>Date:</strong> ${item.productionDates && item.productionDates[0] ? item.productionDates[0].fromYear : 'N/A'}</li>
+             <li class="list-group-item"><strong>Country:</strong> ${item.countries ? item.countries.join(', ') : 'N/A'}</li>
+             <li class="list-group-item"><strong>Medium:</strong> ${item.subMedium || 'N/A'}</li>
+             <li class="list-group-item"><strong>Form:</strong> ${item.forms ? item.forms.join(', ') : 'N/A'}</li>
+           </ul>
+         </div>
        </div>
      </div>
    `;
