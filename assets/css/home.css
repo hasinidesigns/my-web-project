@@ -62,8 +62,9 @@ body, html {
 }
 
 .explore-button:hover {
-    background-color: white;
-    color: #000;
+    background-color: rgba(163, 137, 228, 0.826);
+    color: #ffffff;
+    border-color: rgb(255, 255, 255);
 }
 
 @keyframes fadeInUp {
