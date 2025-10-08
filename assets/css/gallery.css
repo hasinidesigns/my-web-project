@@ -29,7 +29,7 @@
 
 /*Global style for entire page*/
 body {
-  font-family: 'Lato', sans-serif; 
+  font-family: 'Poppins', sans-serif; 
   margin: 0;
   padding: 0;
   background: #e6e6e6;
@@ -127,14 +127,24 @@ header #mainHeader {
  
 /*'view details' button*/
 .view-details-btn {
-  background-color: #e9e9e9;
+  font-family: 'Poppins';
+  font-size: 0.9rem;
+  background-color: #e9e9e995;
   color: rgb(0, 0, 0);
   padding: 0.5rem 1rem;
-  border-radius: 0.6rem;
+  border-radius: 1rem;
   text-decoration: none;
   margin-top: 1rem;
-}
+  border: 1px solid #000000;
+  transition: all 0.3s ease;
+} 
 
+.view-details-btn:hover {
+  background-color: #efefef;
+  color: rgb(2, 2, 2);
+  transform: scale(1.05);
+  border-radius: 1rem;
+}
 
 /*back button on 'view details' page*/
 #backBtn {
@@ -295,15 +305,18 @@ header #mainHeader {
   right: 20px;
   width: 40px;
   height: 40px;
-  background-color: #2d0070;
+  background-color:rgb(105, 105, 105);
   color: white;
   border-radius: 50%;
   text-align: center;
   line-height: 40px;
   font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
+  cursor: pointer; 
   z-index: 1000;
+}
+
+#info-button:hover {
+  background-color: #2d0070;
 }
 
 /*information button panel in top right*/
@@ -377,7 +390,7 @@ header #mainHeader {
 
 /*description on 'view details' page*/
 .details-text-col P {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1.1rem;
   margin-top: 2rem;
   margin-bottom: 3rem;
@@ -391,10 +404,10 @@ header #mainHeader {
 
 /*list of details (i.e date, country etc.) on 'view details' page*/
 .details-text-col .list-group-item {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Poppins', sans-serif;
   border-bottom: 1px solid #eee;
   padding: 1rem 0;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   background-color: rgba(255, 255, 255, 0);
 }
 
