@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advertisements</title>
+
+  <!-- Bootstrap for styling -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/gallery.css">
+</head>
+<body> 
+  <!--information button in top right of the page-->
+  <div id="info-button">!</div>
+  <div id="info-panel">
+    <a href="#" id="close-panel">&times;</a>
+    <h2>More Information</h2>
+<p>This website displays a collection of advertisements from the National Film and Sound Archive of Australia (NFSA). Visitors can explore the collection using interactive filters — by year, medium, country, and color — to discover how styles and themes changed over time.</p>
+<a href="https://www.nfsa.gov.au/" target="_blank" class="btn btn-primary">Visit the NFSA</a>
+    <p class="credits">This website was created for the Faculty of Design & Arts at the University of Canberra, 2025.</p>
+  </div>
+
+  <!--h1 title-->
+  <header class="text-center mb-4">
+    <h1 id="mainHeader" class="display-2">Advertisements</h1>
+  </header>
+
+  <!-- Filter Bar -->
+<div class="container mb-4">
+  <div class="row g-2 justify-content-center align-items-center">
+    <div class="col-auto">
+      <select id="filterYear" class="form-select">
+        <option value="">All Years</option>
+        <option value="2000-2009">2000-2009</option>
+        <option value="1990-1999">1990-1999</option>
+        <option value="1980-1989">1980-1989</option>
+        <option value="1970-1979">1970-1979</option>
+        <option value="1960-1969">1960-1969</option>
+        <option value="1950-1959">1950-1959</option>
+        <option value="1940-1949">1940-1949</option>
+        <option value="1930-1939">1930-1939</option>
+        <option value="1920-1929">1920-1929</option>
+        <option value="1910-1919">1910-1919</option>
+        <option value="1900-1909">1900-1909</option>
+        <option value="1890-1899">1890-1899</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <select id="filterMedium" class="form-select">
+        <option value="">All Mediums</option>
+        <option value="Documentation">Documentation</option>
+        <option value="Sound Recording, Published">Sound Recording, Published</option>
+        <option value="Film">Film</option>
+        <option value="Radio">Radio</option>      
+        <option value="Artefact">Artefact</option> 
+      </select>
+    </div>
+    <div class="col-auto">
+      <select id="filterCountry" class="form-select">
+        <option value="">All Countries</option>
+        <option value="Australia">Australia</option>
+        <option value="United Kingdom">United Kingdom</option>
+        <option value="U.S.A">U.S.A</option>
+        <option value="India">India</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <select id="filterColour" class="form-select">
+        <option value="">All Colours</option>
+        <option value="Colour">Colour</option>
+        <option value="Black & White">Black & White</option>
+        <option value="Tinted">Tinted</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
+    </div>
+  </div>
+</div>
+
+  <!-- gallery container -->
+  <main class="container">
+    <div id="objectsContainer" class="row g-4"></div>
+
+  
+  </main>
+  <!-- Custom JS --> 
+  <script src="assets/js/gallery.js"></script>
+
+  <div id="back-to-top">&#8593;</div>
+
+</body>  
+</html>
