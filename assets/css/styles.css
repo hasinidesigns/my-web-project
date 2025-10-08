@@ -263,6 +263,88 @@ header #mainHeader {
   display: block;
 }
 
+/*information button in top right*/
+#info-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #2d0070;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/*information button panel in top right*/
+#info-panel {
+  position: fixed;
+  top: 0;
+  right: -350px; /* Start off-screen */
+  width: 20rem;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding-left: 2rem;
+  padding-top: 2rem;
+  padding-right: 2rem;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 1001;
+}
+
+/*information button panel when opened in top right*/
+#info-panel.open {
+  right: 0; /* Slide in */
+}
+
+/*information button when closed in top right*/
+#close-panel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  text-decoration: none;
+  color: #333;
+}
+#info-panel h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  align-items:center;
+}
+
+#info-panel p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+#info-panel .btn-primary {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  padding: 0.5rem 0.2rem;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+#info-panel .btn-primary:hover {
+  background-color: #3a5196;
+  color: #ffffff;
+}
+
 /*title of card on 'view details' page*/
 .details-text-col h2 {
   font-size: 3rem;
