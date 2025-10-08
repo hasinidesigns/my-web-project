@@ -263,6 +263,14 @@ header #mainHeader {
   display: block;
 }
 
+/*credits for university*/
+#info-panel .credits {
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-align: center;
+  margin-top: 18rem;
+}
+
 /*information button in top right*/
 #info-button {
   position: fixed;
