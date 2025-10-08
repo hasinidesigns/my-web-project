@@ -234,6 +234,23 @@ header #mainHeader {
   box-shadow: 0 0 1rem rgba(88, 88, 88, 0.15)
 }
 
+#back-to-top {
+  position: fixed;
+  bottom: 50%;
+  right: 1.4rem;
+  width: 2.5rem;
+  height: 2.4rem;
+  background-color: #000000;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 2.4rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+}
+
 
 .details-container .row {
   display: flex;

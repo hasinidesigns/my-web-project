@@ -90,6 +90,24 @@ document.addEventListener("DOMContentLoaded", () => {
     currentQueryUrl = newQuery;
     fetchResults(); // Re-fetch with the new filter
   });
+
+  // Back to top button logic//
+  const backToTopButton = document.getElementById('back-to-top');
+
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 200) {
+      backToTopButton.style.display = 'block';
+    } else {
+      backToTopButton.style.display = 'none';
+    }
+  });
+
+  backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
 });
  
 //Diaplay results on the page//
