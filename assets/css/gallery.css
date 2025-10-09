@@ -68,7 +68,7 @@ header #mainHeader {
   font-weight: 800; 
   text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
   animation: fadeUp 1s ease-in-out;
-  text-shadow: 0 0 2rem #9e9e9e, 0 0 2rem #6e6e6e;
+  text-shadow: 0 0 2rem #c6c5c5, 0 0 2rem #767676;
 
 }
 
