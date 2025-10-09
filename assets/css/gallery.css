@@ -62,12 +62,14 @@ header {
 
 header #mainHeader {
   font-size: 6.5rem;
-  color: #2a2a2a; 
+  color: rgb(76, 76, 76); 
   padding-top: 5rem; 
   padding-bottom: 0.5rem;
   font-weight: 800; 
   text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
   animation: fadeUp 1s ease-in-out;
+  text-shadow: 0 0 2rem #9e9e9e, 0 0 2rem #6e6e6e;
+
 }
 
 
@@ -174,7 +176,7 @@ header #mainHeader {
 .card .card-details .view-details-btn {
   font-family: 'Poppins';
   font-size: 0.9rem;
-  background-color: #e9e9e995;
+  background-color: #ffffff95;
   color: rgb(0, 0, 0);
   padding: 0.5rem 1rem;
   border-radius: 1rem;
@@ -249,15 +251,15 @@ header #mainHeader {
 }
 
 .details-container #backBtn {
-  width: 12rem;
-  margin-top: 3rem;
+  width: 11rem; 
   font-family: 'Poppins', sans-serif;
   color: #000000;
-  background-color: #e9e9e9;
+  background-color: #ffffff;
+  margin-left: -5rem;
 }
 
 .details-container #backBtn:hover {
-  background-color: #837fca;
+  background-color: #837fcadb;
 }
 
 
@@ -368,6 +370,4 @@ header #mainHeader {
   cursor: pointer;
   display: none;
   z-index: 1000;
-}
- 
- 
+} 
