@@ -210,29 +210,44 @@ async function loadItemDetails(id) {
     const accessCopy = item.media && Array.isArray(item.media) ? item.media.find(m => m.itemUsage === 'Access/Browsing copy') : null;
 
     // Check the media type and create the appropriate HTML element.
-    if (accessCopy && accessCopy.mediaType === 'Audio Media File') {
-      // If it's an audio file, create an <audio> element.
-      mediaElement = `
-        <audio controls class="img-fluid">
-          <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-      `;
-    } else if (accessCopy && accessCopy.preview && accessCopy.preview.type === 'video') {
-      // If it's a video file, create a <video> element.
-      mediaElement = `
-        <video controls class="img-fluid">
-          <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="video/mp4">
-          Your browser does not support the video element.
-        </video>
-      `;
-    } else {
-      // Otherwise, assume it's an image and create an <img> element.
-      let img = "https://via.placeholder.com/400x200?text=No+Image"; // Default placeholder
-      if (accessCopy && accessCopy.preview && accessCopy.preview.filePath) {
-        img = `https://media.nfsacollection.net/${accessCopy.preview.filePath}`;
+    if (accessCopy) {
+      if (accessCopy.mediaType === 'Audio Media File') {
+        // If it's an audio file, create an <audio> element.
+        mediaElement = `
+          <audio controls class="img-fluid">
+            <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        `;
+      } else if (accessCopy.preview && accessCopy.preview.type === 'video') {
+        // If it's a video file, create a <video> element.
+        mediaElement = `
+          <video controls class="img-fluid">
+            <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="video/mp4">
+            Your browser does not support the video element.
+          </video>
+        `;
+      } else {
+        // Otherwise, assume it's an image and create an <img> element.
+        let img = "https://via.placeholder.com/400x200?text=No+Image"; // Default placeholder
+        if (accessCopy && accessCopy.preview && accessCopy.preview.filePath) {
+          img = `https://media.nfsacollection.net/${accessCopy.preview.filePath}`;
+        }
+        mediaElement = `<img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">`;
       }
-      mediaElement = `<img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">`;
+    } else {
+      // No access copy, so show a placeholder.
+      if (item.subMedium === 'Film' || item.subMedium === 'Radio' || item.subMedium === 'Sound Recording, Published') {
+        mediaElement = `
+          <div class="no-preview" style="text-align: center; padding: 20px; border: 1px dashed #ccc;">
+            <p>No preview available for this item.</p>
+          </div>
+        `;
+      } else {
+        // For other types with no access copy, use the standard image placeholder.
+        let img = "https://via.placeholder.com/400x200?text=No+Image"; // Default placeholder
+        mediaElement = `<img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">`;
+      }
     }
 
     // Populate the details content with the fetched data and the media element.
