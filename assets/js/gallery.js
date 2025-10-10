@@ -1,4 +1,7 @@
+
+let savedScrollPosition = 0;
 let cachedResults = [];// Stores results from API//
+
 let currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes"; //API URL for search//
 
 // Abstracted function to handle fetching all pages for a given query
@@ -176,11 +179,13 @@ function displayResults(results) {
 //Items//
 //function to load details for a single item by its ID//
 async function loadItemDetails(id) {
+  savedScrollPosition = window.scrollY; // Save scroll position
   const overlay = document.getElementById("detailsOverlay");
   const detailsContent = overlay.querySelector(".details-content");
   detailsContent.innerHTML = "<p>Loading item details...</p>";
   overlay.style.display = "flex";
   document.body.classList.add("overlay-active");
+  document.body.style.overflow = 'hidden'; // Disable scrolling on the body
 
   try {
     const response = await fetch(`https://api.collection.nfsa.gov.au/title/${id}`);
@@ -238,6 +243,8 @@ async function loadItemDetails(id) {
     document.getElementById("backBtn").addEventListener("click", () => {
       overlay.style.display = "none";
       document.body.classList.remove("overlay-active");
+      document.body.style.overflow = ''; // Re-enable scrolling
+      window.scrollTo({ top: savedScrollPosition, behavior: 'smooth' }); // Restore scroll position
     });
 
   } catch (err) {
