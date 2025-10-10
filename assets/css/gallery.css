@@ -114,6 +114,10 @@ header #mainHeader {
   background-color: #b9a8cd;
 }
 
+.form-select.filter-active {
+  background-color: #e0d8f0; 
+}
+
 
 /*-----Gallery-----*/
 .card {

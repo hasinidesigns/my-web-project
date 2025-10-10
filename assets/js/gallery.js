@@ -108,6 +108,18 @@ document.addEventListener("DOMContentLoaded", () => {
       behavior: 'smooth'
     });
   });
+
+  // Filter dropdown background color change
+  const filterDropdowns = document.querySelectorAll('.form-select');
+  filterDropdowns.forEach(dropdown => {
+    dropdown.addEventListener('change', () => {
+      if (dropdown.value) {
+        dropdown.classList.add('filter-active');
+      } else {
+        dropdown.classList.remove('filter-active');
+      }
+    });
+  });
 });
  
 //Diaplay results on the page//
