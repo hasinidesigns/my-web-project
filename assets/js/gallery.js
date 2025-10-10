@@ -203,7 +203,7 @@ async function loadItemDetails(id) {
     const response = await fetch(`https://api.collection.nfsa.gov.au/title/${id}`);
     const item = await response.json();
 
-    // This will hold the HTML for the media (image, video, or audio).
+    // This will hold the HTML for the media (image, video)
     let mediaElement;
     
     // Find the correct media file to display, looking for the "Access/Browsing copy".
@@ -211,15 +211,7 @@ async function loadItemDetails(id) {
 
     // Check the media type and create the appropriate HTML element.
     if (accessCopy) {
-      if (accessCopy.mediaType === 'Audio Media File') {
-        // If it's an audio file, create an <audio> element.
-        mediaElement = `
-          <audio controls class="img-fluid">
-            <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="audio/mpeg">
-            Your browser does not support the audio element.
-          </audio>
-        `;
-      } else if (accessCopy.preview && accessCopy.preview.type === 'video') {
+      if (accessCopy.preview && accessCopy.preview.type === 'video') {
         // If it's a video file, create a <video> element.
         mediaElement = `
           <video controls class="img-fluid">
