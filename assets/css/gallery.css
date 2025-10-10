@@ -415,3 +415,74 @@ body.overlay-active {
 body.overlay-active .container, body.overlay-active header {
   filter: blur(5px);
 }
+
+/*----Media Queries----*/
+
+/* Desktop */
+@media (min-width: 62rem) {
+  .col-md-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+}
+
+/* Tablets */
+@media (max-width: 61.9375rem) {
+  .col-md-4 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .details-container .row {
+    flex-direction: column;
+  }
+
+  .details-container .details-image-col,
+  .details-container .details-text-col {
+    padding-right: 0;
+  }
+}
+
+/* Mobile */
+@media (max-width: 36rem) {
+  header #mainHeader {
+    font-size: 0.3rem;
+    padding-top: 3rem;
+  }
+
+  .container.mb-4 .row {
+    flex-direction: column;
+  }
+
+  .form-select, #applyFilters {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  #applyFilters {
+    margin-left: 0;
+  }
+
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .details-content {
+    max-width: 95%;
+    padding: 1rem;
+  }
+
+  .details-container .details-text-col h2 {
+    font-size: 2rem;
+  }
+
+  #info-panel {
+    width: 100%;
+    right: -100%;
+  }
+
+  #info-panel.open {
+    right: 0;
+  }
+}
