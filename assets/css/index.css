@@ -71,8 +71,8 @@ p {
     font-size: 1.5rem;
     color: white;
     background-color: transparent;
-    border: 2px solid white;
-    border-radius: 50px;
+    border: 0.125rem solid white;
+    border-radius: 3.125rem;
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
     font-family: 'Poppins', sans-serif;
@@ -89,11 +89,60 @@ p {
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(1.25rem);
     }
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+
+/* Mobile Devices */
+@media (max-width: 48rem) {
+    .hero-text h1 {
+        font-size: 2.5em;
+    }
+
+    .hero-text p {
+        font-size: 1.2em;
+    }
+
+    .explore-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.2rem;
+    }
+}
+
+/* Tablet Devices */
+@media (min-width: 48.0625rem) and (max-width: 64rem) {
+    .hero-text h1 {
+        font-size: 3.5em;
+    }
+
+    .hero-text p {
+        font-size: 1.4em;
+    }
+
+    .explore-button {
+        padding: 1rem 1.8rem;
+        font-size: 1.4rem;
+    }
+}
+
+/* Desktop Devices */
+@media (min-width: 64.0625rem) {
+    .hero-text h1 {
+        font-size: 4em;
+    }
+
+    .hero-text p {
+        font-size: 1.5em;
+    }
+
+    .explore-button {
+        padding: 1rem 1.8rem;
+        font-size: 1.5rem;
     }
 }
  
