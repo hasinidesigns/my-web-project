@@ -61,11 +61,12 @@ header {
 }
 
 header #mainHeader {
-  font-size: 5rem;
+  font-size: 6rem;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   color: rgb(0, 0, 0); 
   padding-top: 5rem; 
   padding-bottom: 0.5rem;
-  font-weight: 800; 
+  font-weight: 700; 
   text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
   animation: fadeUp 1s ease-in-out;
   text-shadow: 0 0 2rem #c6c5c5, 0 0 2rem #767676;
@@ -228,7 +229,7 @@ header #mainHeader {
 
 .details-container .details-text-col h2 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.3rem;
 }
 
 .details-container .details-text-col p {
@@ -239,6 +240,8 @@ header #mainHeader {
 
 .details-container .details-text-col .list-group-item {
   padding: 0.5rem 0;
+  padding-top: 1rem;
+  font-size: 0.9rem;
 }
 
 .details-container #backBtn {
@@ -247,15 +250,16 @@ header #mainHeader {
   left: 1rem;
   width: auto;
   padding: 0.5rem 1rem;
-  background-color: #f8f9fa;
+  background-color: #494949;
   border: 1px solid #dee2e6;
   border-radius: 0.5rem;
-  color: #000000;
+  color: #e6e6e6;
 }
 
 .details-container #backBtn:hover {
-  background-color: rgba(131, 120, 168, 0.862);
+  background-color: rgba(219, 219, 219, 0.862);
   border-color: #000000;
+  color: #000000;
 }
 
 
@@ -354,20 +358,24 @@ header #mainHeader {
 #back-to-top {
   position: fixed;
   bottom: 50%;
+  padding-top: 0.1rem;
   right: 1.4rem;
   width: 2.5rem;
   height: 2.4rem;
-  background-color: #000000;
-  color: white;
+  background-color: #d9d9d9;
+  color: rgb(0, 0, 0);
   border-radius: 50%;
   text-align: center;
   line-height: 2.4rem;
-  font-size: 1.4rem;
-  cursor: pointer;
+  font-size: 2rem;
   display: none;
   z-index: 1000;
 } 
 
+#back-to-top:hover {
+ cursor: pointer;
+ color: #592dd1;
+}
 
 .overlay-container {
   position: fixed;
