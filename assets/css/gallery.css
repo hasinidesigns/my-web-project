@@ -446,7 +446,7 @@ body.overlay-active .container, body.overlay-active header {
 /* Mobile */
 @media (max-width: 36rem) {
   header #mainHeader {
-    font-size: 0.3rem;
+    font-size: 4rem;
     padding-top: 3rem;
   }
 
