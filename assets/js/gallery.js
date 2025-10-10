@@ -1,65 +1,71 @@
 
+// Variable to save scroll position when viewing details
 let savedScrollPosition = 0;
+
 let cachedResults = [];// Stores results from API//
 
 let currentQueryUrl = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes"; //API URL for search//
 
-// Abstracted function to handle fetching all pages for a given query
+// Function to fetch all pages of results from the API
 async function fetchAllPages(baseUrl) {
-  let allResults = [];
-  let page = 1;
-  while (true) {
+  let allResults = []; // Store all results here
+  let page = 1; // Start from page 1
+  while (true) { // Keep fetching until no more results
     console.log(`Fetching page ${page} for ${baseUrl}`);
     const response = await fetch(`${baseUrl}&page=${page}`);
 
-    // Read the response as text first to handle empty bodies from the server
+    // Convert the response to text first
     const responseText = await response.text();
     if (!responseText) {
-      // The response body is empty, so we can safely assume there are no more pages.
+      // If there is no response, reached the end
       break;
     }
 
-    // Now that we know the response is not empty, we can parse it as JSON.
+    // Convert the text to JSON so we can read the results
     const data = JSON.parse(responseText);
 
     if (data.results && data.results.length > 0) {
+      // Add the results from this page to the full list
       allResults = allResults.concat(data.results);
-      page++;
+      page++; // Move to next page
     } else {
-      // The JSON is valid but contains no results, so we're also done.
+      // No results on this page, stop fetching
       break;
     }
   }
-  return allResults;
+  return allResults; // Return all the results we found
 }
 
-// Main function to orchestrate fetching and displaying data
+// Main function to fetch results and show them on the page
 async function fetchResults() {
   try {
-    const results = await fetchAllPages(currentQueryUrl);
+    const results = await fetchAllPages(currentQueryUrl); // Get all pages
     console.log(`Finished fetching. Total items: ${results.length}`);
-    cachedResults = results;
-    displayResults(cachedResults);
+    cachedResults = results; // Save results in cache
+    displayResults(cachedResults);  // Show results on the page
   } catch (err) {
+    // If there is an error, log it and show an error message
     console.error("Error fetching data:", err);
     document.getElementById("objectsContainer").innerHTML = `<p class='text-danger'>Error fetching data. Please try again later.</p>`;
   }
 }
 
+// Run code when the page loads
 document.addEventListener("DOMContentLoaded", () => {
-  fetchResults(); // Initial load
+  fetchResults(); // Get initial results
 
-  // Info panel//
+  // Info panel buttons//
   const infoButton = document.getElementById('info-button');
   const infoPanel = document.getElementById('info-panel');
   const closePanel = document.getElementById('close-panel');
 
+  // Show/hide info panel
   infoButton.addEventListener('click', () => {
     infoPanel.classList.toggle('open');
   });
 
   closePanel.addEventListener('click', (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default link behavior
     infoPanel.classList.remove('open');
   });
 
@@ -69,15 +75,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let country = document.getElementById("filterCountry").value;
     const medium = document.getElementById("filterMedium").value;
     const year = document.getElementById("filterYear").value;
+    
+    // Start building a new query URL
     let newQuery = "https://api.collection.nfsa.gov.au/search?query=advertisement&hasMedia=yes";
     
+
+    // Add filters if selected
     if (colour) {
       newQuery += `&colour=${encodeURIComponent(colour)}`;
     }
 
     if (country) {
       if (country === "U.S.A") {
-        country = "U%2ES%2EA";
+        country = "U%2ES%2EA"; // Encode country name
       }
       newQuery += `&countries=${country}`;
     }
@@ -90,12 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
       newQuery += `&year=${year}`;
     }
     
-    currentQueryUrl = newQuery;
-    fetchResults(); // Re-fetch with the new filter
+    currentQueryUrl = newQuery; // Update the current URL
+    fetchResults(); //Fetch filtered results
   });
 
   // Back to top button logic//
-  const backToTopButton = document.getElementById('back-to-top');
+  const backToTopButton = document.getElementById('back-to-top'); 
 
   window.addEventListener('scroll', () => {
     if (window.pageYOffset > 200) {
@@ -108,11 +118,11 @@ document.addEventListener("DOMContentLoaded", () => {
   backToTopButton.addEventListener('click', () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth' // Smooth scroll to top
     });
   });
 
-  // Filter dropdown background color change
+  // Change background for active filter dropdowns
   const filterDropdowns = document.querySelectorAll('.form-select');
   filterDropdowns.forEach(dropdown => {
     dropdown.addEventListener('change', () => {
@@ -127,14 +137,13 @@ document.addEventListener("DOMContentLoaded", () => {
  
 //Diaplay results on the page//
 function displayResults(results) {
-  document.body.classList.remove('details-view');
+  document.body.classList.remove('details-view'); // Remove details view class
  const container = document.getElementById("objectsContainer");
- container.innerHTML = ""; // Clear previous
+ container.innerHTML = ""; // Clear previous content
 
- //check  if item has an image, otherwise use placeholder//
+  // Check if the item has a preview
  results.forEach(item => {
-   console.log(item.id);
-   let img;
+   let img; 
    if (item.preview && item.preview[0]) {
      if (item.preview[0].type === 'video') {
        img = `https://media.nfsacollection.net/${item.preview[0].thumbnailFilePath}`;
@@ -143,15 +152,18 @@ function displayResults(results) {
      } else {
        img = `https://media.nfsacollection.net/${item.preview[0].filePath}`;
      }
+      
+     // Use a placeholder if no preview exists
    } else {
      img = "https://via.placeholder.com/400x200?text=No+Image";
    }
 
+   
   //Bootstrap card for each item//
    const card = document.createElement("div");
    card.classList.add("col-md-4"); //Bootstrap column
 
-   //Add title, name and image to card//
+    // Add HTML inside the card
    card.innerHTML = `
      <div class="card">
        <img src="${img}" class="card-img-top" alt="${item.title || "Untitled"}">
@@ -169,7 +181,7 @@ function displayResults(results) {
    container.appendChild(card);
  });
 
- // Add click event for details
+ // Add click event for each "View Details" button
  document.querySelectorAll(".view-details-btn").forEach(btn => {
    btn.addEventListener("click", e => loadItemDetails(e.target.dataset.id));
  });
@@ -177,10 +189,10 @@ function displayResults(results) {
 
 
 //Items//
-//function to load details for a single item by its ID//
+// Function to show details for a single item
 async function loadItemDetails(id) {
-  // Save the current scroll position of the page, so we can return the user to the same spot.
-  savedScrollPosition = window.scrollY; 
+
+  savedScrollPosition = window.scrollY; // Save current scroll
   
   // Get the overlay and details content elements from the HTML.
   const overlay = document.getElementById("detailsOverlay");
@@ -199,17 +211,17 @@ async function loadItemDetails(id) {
   document.body.style.overflow = 'hidden'; 
 
   try {
-    // Fetch the details for the specific item using its ID.
+    // Fetch the details for the specific item using its ID
     const response = await fetch(`https://api.collection.nfsa.gov.au/title/${id}`);
     const item = await response.json();
 
-    // This will hold the HTML for the media (image, video)
+    // Hold the HTML for the media (image, video)
     let mediaElement;
     
-    // Find the correct media file to display, looking for the "Access/Browsing copy".
+    // Find the correct media file to display
     const accessCopy = item.media && Array.isArray(item.media) ? item.media.find(m => m.itemUsage === 'Access/Browsing copy') : null;
 
-    // Check the media type and create the appropriate HTML element.
+    // Check the media type and create the appropriate HTML element
     if (accessCopy) {
       if (accessCopy.preview && accessCopy.preview.type === 'video') {
         // If it's a video file, create a <video> element.
@@ -236,7 +248,7 @@ async function loadItemDetails(id) {
           </div>
         `;
       } else {
-        // For other types with no access copy, use the standard image placeholder.
+        // For other types with no access copy, use the standard image placeholder
         let img = "https://via.placeholder.com/400x200?text=No+Image"; // Default placeholder
         mediaElement = `<img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">`;
       }
@@ -269,9 +281,7 @@ async function loadItemDetails(id) {
 
     // Add an event listener to the "Back to Gallery" button.
     document.getElementById("backBtn").addEventListener("click", () => {
-      // Hide the overlay.
-      overlay.style.display = "none";
-      // Remove the "overlay-active" class from the body.
+      overlay.style.display = "none"; 
       document.body.classList.remove("overlay-active");
       // Re-enable scrolling on the main page.
       document.body.style.overflow = ''; 
