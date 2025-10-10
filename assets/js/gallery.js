@@ -179,22 +179,39 @@ function displayResults(results) {
 //Items//
 //function to load details for a single item by its ID//
 async function loadItemDetails(id) {
-  savedScrollPosition = window.scrollY; // Save scroll position
+  // Save the current scroll position of the page, so we can return the user to the same spot.
+  savedScrollPosition = window.scrollY; 
+  
+  // Get the overlay and details content elements from the HTML.
   const overlay = document.getElementById("detailsOverlay");
   const detailsContent = overlay.querySelector(".details-content");
+  
+  // Show a loading message while we fetch the data.
   detailsContent.innerHTML = "<p>Loading item details...</p>";
+  
+  // Display the overlay to the user.
   overlay.style.display = "flex";
+  
+  // Add a class to the body to indicate that the overlay is active.
   document.body.classList.add("overlay-active");
-  document.body.style.overflow = 'hidden'; // Disable scrolling on the body
+  
+  // Disable scrolling on the main page while the overlay is open.
+  document.body.style.overflow = 'hidden'; 
 
   try {
+    // Fetch the details for the specific item using its ID.
     const response = await fetch(`https://api.collection.nfsa.gov.au/title/${id}`);
     const item = await response.json();
 
+    // This will hold the HTML for the media (image, video, or audio).
     let mediaElement;
+    
+    // Find the correct media file to display, looking for the "Access/Browsing copy".
     const accessCopy = item.media && Array.isArray(item.media) ? item.media.find(m => m.itemUsage === 'Access/Browsing copy') : null;
 
+    // Check the media type and create the appropriate HTML element.
     if (accessCopy && accessCopy.mediaType === 'Audio Media File') {
+      // If it's an audio file, create an <audio> element.
       mediaElement = `
         <audio controls class="img-fluid">
           <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="audio/mpeg">
@@ -202,6 +219,7 @@ async function loadItemDetails(id) {
         </audio>
       `;
     } else if (accessCopy && accessCopy.preview && accessCopy.preview.type === 'video') {
+      // If it's a video file, create a <video> element.
       mediaElement = `
         <video controls class="img-fluid">
           <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="video/mp4">
@@ -209,6 +227,7 @@ async function loadItemDetails(id) {
         </video>
       `;
     } else {
+      // Otherwise, assume it's an image and create an <img> element.
       let img = "https://via.placeholder.com/400x200?text=No+Image"; // Default placeholder
       if (accessCopy && accessCopy.preview && accessCopy.preview.filePath) {
         img = `https://media.nfsacollection.net/${accessCopy.preview.filePath}`;
@@ -216,6 +235,7 @@ async function loadItemDetails(id) {
       mediaElement = `<img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">`;
     }
 
+    // Populate the details content with the fetched data and the media element.
     detailsContent.innerHTML = `
       <div class="details-container">
         <button id="backBtn" class="btn btn-secondary mb-3">← Back to Gallery</button>
@@ -240,14 +260,20 @@ async function loadItemDetails(id) {
       </div>
     `;
 
+    // Add an event listener to the "Back to Gallery" button.
     document.getElementById("backBtn").addEventListener("click", () => {
+      // Hide the overlay.
       overlay.style.display = "none";
+      // Remove the "overlay-active" class from the body.
       document.body.classList.remove("overlay-active");
-      document.body.style.overflow = ''; // Re-enable scrolling
-      window.scrollTo({ top: savedScrollPosition, behavior: 'smooth' }); // Restore scroll position
+      // Re-enable scrolling on the main page.
+      document.body.style.overflow = ''; 
+      // Scroll the page back to the saved position.
+      window.scrollTo({ top: savedScrollPosition, behavior: 'smooth' }); 
     });
 
   } catch (err) {
+    // If there's an error fetching the data, log it to the console and show an error message.
     console.error("Error fetching item details:", err);
     detailsContent.innerHTML = "<p class='text-danger'>Error loading details.</p>";
   }
