@@ -213,6 +213,11 @@ header #mainHeader {
   flex: 1 1 60%;
 }
 
+.details-container .details-text-col a {
+  margin-top: auto;
+  color: rgb(89, 122, 201);
+}
+
 .details-container .image-container {
   width: 100%;
   position: relative;

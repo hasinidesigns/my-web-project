@@ -211,6 +211,7 @@ async function loadItemDetails(id) {
           <div class="details-text-col">
             <h2>${item.title || "Untitled"}</h2>
             <p>${item.summary || ""}</p>
+            <a href="https://www.collection.nfsa.gov.au/title/${item.id}" target="_blank">Learn More↗</a>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><strong>Date:</strong> ${item.productionDates && item.productionDates[0] ? item.productionDates[0].fromYear : 'N/A'}</li>
               <li class="list-group-item"><strong>Country:</strong> ${item.countries ? item.countries.join(', ') : 'N/A'}</li>
