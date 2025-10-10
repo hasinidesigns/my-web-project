@@ -164,58 +164,72 @@ function displayResults(results) {
 //Items//
 //function to load details for a single item by its ID//
 async function loadItemDetails(id) {
-  document.body.classList.add('details-view');
- //grab the container where content is displayed//
- const output = document.getElementById("objectsContainer");
- //show temporary loading message//
- output.innerHTML = "<p>Loading item details...</p>"; 
+  const overlay = document.getElementById("detailsOverlay");
+  const detailsContent = overlay.querySelector(".details-content");
+  detailsContent.innerHTML = "<p>Loading item details...</p>";
+  overlay.style.display = "flex";
+  document.body.classList.add("overlay-active");
 
- try {
-  //fetch details for the single item from the NFSA API//
-   const response = await fetch(`https://api.collection.nfsa.gov.au/title/${id}`); 
-   //convert reponse to JSON format//
-   const item = await response.json();
+  try {
+    const response = await fetch(`https://api.collection.nfsa.gov.au/title/${id}`);
+    const item = await response.json();
 
-   let img = "https://via.placeholder.com/400x200?text=No+Image"; // Default placeholder
+    let mediaElement;
+    const accessCopy = item.media && Array.isArray(item.media) ? item.media.find(m => m.itemUsage === 'Access/Browsing copy') : null;
 
-   if (item.media && Array.isArray(item.media)) {
-     const accessCopy = item.media.find(m => m.itemUsage === 'Access/Browsing copy');
-     if (accessCopy && accessCopy.preview && accessCopy.preview.filePath) {
-       img = `https://media.nfsacollection.net/${accessCopy.preview.filePath}`;
-     }
-   }
+    if (accessCopy && accessCopy.mediaType === 'Audio Media File') {
+      mediaElement = `
+        <audio controls class="img-fluid">
+          <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      `;
+    } else if (accessCopy && accessCopy.preview && accessCopy.preview.type === 'video') {
+      mediaElement = `
+        <video controls class="img-fluid">
+          <source src="https://media.nfsacollection.net/${accessCopy.preview.filePath}" type="video/mp4">
+          Your browser does not support the video element.
+        </video>
+      `;
+    } else {
+      let img = "https://via.placeholder.com/400x200?text=No+Image"; // Default placeholder
+      if (accessCopy && accessCopy.preview && accessCopy.preview.filePath) {
+        img = `https://media.nfsacollection.net/${accessCopy.preview.filePath}`;
+      }
+      mediaElement = `<img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">`;
+    }
 
-  //replace container with content with item details//
-   output.innerHTML = `
-     <div class="details-container">
-       <button id="backBtn" class="btn btn-secondary mb-3">← Back to Gallery</button>
-       <div class="row">
-         <div class="details-image-col">
-           <div class="image-container">
-             <img src="${img}" class="img-fluid" alt="${item.title || "Untitled"}">
-           </div>
-         </div>
-         <div class="details-text-col">
-           <h2>${item.title || "Untitled"}</h2>
-           <p>${item.summary || ""}</p>
-           <ul class="list-group list-group-flush">
-             <li class="list-group-item"><strong>Date:</strong> ${item.productionDates && item.productionDates[0] ? item.productionDates[0].fromYear : 'N/A'}</li>
-             <li class="list-group-item"><strong>Country:</strong> ${item.countries ? item.countries.join(', ') : 'N/A'}</li>
-             <li class="list-group-item"><strong>Medium:</strong> ${item.subMedium || 'N/A'}</li>
-             <li class="list-group-item"><strong>Form:</strong> ${item.forms ? item.forms.join(', ') : 'N/A'}</li>
-           </ul>
-         </div>
-       </div>
-     </div>
-   `;
+    detailsContent.innerHTML = `
+      <div class="details-container">
+        <button id="backBtn" class="btn btn-secondary mb-3">← Back to Gallery</button>
+        <div class="row">
+          <div class="details-image-col">
+            <div class="image-container">
+              ${mediaElement}
+            </div>
+          </div>
+          <div class="details-text-col">
+            <h2>${item.title || "Untitled"}</h2>
+            <p>${item.summary || ""}</p>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><strong>Date:</strong> ${item.productionDates && item.productionDates[0] ? item.productionDates[0].fromYear : 'N/A'}</li>
+              <li class="list-group-item"><strong>Country:</strong> ${item.countries ? item.countries.join(', ') : 'N/A'}</li>
+              <li class="list-group-item"><strong>Medium:</strong> ${item.subMedium || 'N/A'}</li>
+              <li class="list-group-item"><strong>Form:</strong> ${item.forms ? item.forms.join(', ') : 'N/A'}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    `;
 
-   //event listener for 'back button' - when clicked it reloads previosuly cached gallery results//
-   document.getElementById("backBtn").addEventListener("click", () => displayResults(cachedResults));
+    document.getElementById("backBtn").addEventListener("click", () => {
+      overlay.style.display = "none";
+      document.body.classList.remove("overlay-active");
+    });
 
- } catch (err) {
-  //if theres error fetching -> logs and shows error message//
-   console.error("Error fetching item details:", err);
-   output.innerHTML = "<p class='text-danger'>Error loading details.</p>";
- }
+  } catch (err) {
+    console.error("Error fetching item details:", err);
+    detailsContent.innerHTML = "<p class='text-danger'>Error loading details.</p>";
+  }
 } 
 

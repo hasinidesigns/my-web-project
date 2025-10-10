@@ -61,8 +61,8 @@ header {
 }
 
 header #mainHeader {
-  font-size: 6.5rem;
-  color: rgb(76, 76, 76); 
+  font-size: 5rem;
+  color: rgb(0, 0, 0); 
   padding-top: 5rem; 
   padding-bottom: 0.5rem;
   font-weight: 800; 
@@ -227,39 +227,35 @@ header #mainHeader {
 }
 
 .details-container .details-text-col h2 {
-  font-size: 3rem;
-  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .details-container .details-text-col p {
-  margin-top: 2rem;
-  margin-bottom: 3rem;
-}
-
-.details-container .details-text-col .list-group-item {
-  font-family: 'Poppins', sans-serif;
-  border-bottom: 1px solid #eee;
-  padding: 1rem 0;
-  font-size: 0.9rem;
-  background-color: rgba(255, 255, 255, 0);
-  border: none;
-}
-
-.details-container .details-text-col .list-group-item strong { 
-  font-family: 'Poppins', sans-serif;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
   font-size: 1rem;
 }
 
+.details-container .details-text-col .list-group-item {
+  padding: 0.5rem 0;
+}
+
 .details-container #backBtn {
-  width: 11rem; 
-  font-family: 'Poppins', sans-serif;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
   color: #000000;
-  background-color: #ffffff;
-  margin-left: -5rem;
 }
 
 .details-container #backBtn:hover {
-  background-color: #837fcadb;
+  background-color: rgba(131, 120, 168, 0.862);
+  border-color: #000000;
 }
 
 
@@ -371,3 +367,34 @@ header #mainHeader {
   display: none;
   z-index: 1000;
 } 
+
+
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.details-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+body.overlay-active {
+  overflow: hidden;
+}
+
+body.overlay-active .container, body.overlay-active header {
+  filter: blur(5px);
+}
